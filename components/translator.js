@@ -28,9 +28,15 @@ class Translator {
         let translatedText = text;
 
         // Check for American phrase translations.
-        Object.keys(americanOnly).forEach((key) => {
-            let translation = '<span class="highlight">' + americanOnly[key] + '</span>'
-            translatedText = translatedText.replace(key, translation);
+        let phrases = [];
+        Object.keys(americanOnly).sort((key1, key2) => {
+            // Sort keys by longest words first.
+            return key2.length - key1.length;
+        }).forEach((key) => {
+            if(translatedText.includes(key)){
+                let translation = '<span class="highlight">' + americanOnly[key] + '</span>'
+                translatedText = translatedText.replace(key, translation);
+            }
         });
 
         // Check for American to British spelling and titles.
@@ -68,7 +74,10 @@ class Translator {
         let translatedText = text;
 
         // Check for British phrase translations.
-        Object.keys(britishOnly).forEach((key) => {
+        Object.keys(britishOnly).sort((key1, key2) => {
+            // Sort keys by longest words first.
+            return key2.length - key1.length;
+        }).forEach((key) => {
             let translation = '<span class="highlight">' + britishOnly[key] + '</span>'
             translatedText = translatedText.replace(key, translation);
         });
