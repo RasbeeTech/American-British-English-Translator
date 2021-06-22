@@ -14,7 +14,7 @@ class Translator {
         if(locale == 'american-to-british'){
             done(null, this.americanToBritsh(text));
         } else if(locale == 'british-to-american'){
-            this.britishToAmerican(text);
+            done(null, this.britishToAmerican(text));
         } else {
             return done('Invalid value for locale field');
         }
@@ -24,9 +24,10 @@ class Translator {
         /*
             Handles American to British translations.
         */
-        // Check for american phrase translations.
+
         let translatedText = text;
 
+        // Check for American phrase translations.
         Object.keys(americanOnly).forEach((key) => {
             let translation = '<span class="highlight">' + americanOnly[key] + '</span>'
             translatedText = translatedText.replace(key, translation);
@@ -63,7 +64,47 @@ class Translator {
         /*
             Handles British to American translations.
         */
+
+        let translatedText = text;
+
+        // Check for British phrase translations.
+        Object.keys(britishOnly).forEach((key) => {
+            let translation = '<span class="highlight">' + britishOnly[key] + '</span>'
+            translatedText = translatedText.replace(key, translation);
+        });
+
+        // Check for British to American spelling and titles.
+        let textArray = translatedText.split(' ');
+        let punctuation = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+
+        textArray.forEach((rawText) => {
+            let cleanText = rawText.replace(punctuation, '');
+            
+            if(Object.values(americanToBritishTitles).includes(rawText.toLowerCase())){
+                let americanTitle = Object.keys(americanToBritishTitles).find((key) => {
+                    return americanToBritishTitles[key] === rawText.toLowerCase();
+                });
+                let translation = '<span class="highlight">' + titleCase(americanTitle) + '</span>';
+                translatedText = translatedText.replace(rawText, translation);
+            }
+            if(Object.values(americanToBritishSpelling).includes(cleanText.toLowerCase())){
+                let americanSpelling = Object.keys(americanToBritishSpelling).find((key) => {
+                    return americanToBritishSpelling[key] === rawText.toLowerCase();
+                });
+                let translation = '<span class="highlight">' + americanSpelling + '</span>';
+                translatedText = translatedText.replace(rawText, translation);
+            }
+            if(/^([0-1]?[0-9]|2[0-3]).[0-5][0-9]$/.test(rawText)){
+                let americanTime = rawText.replace('.', ':');
+                let translation = '<span class="highlight">' + americanTime + '</span>';
+                translatedText = translatedText.replace(rawText, translation);
+            }
+        
+        });
+
+        return translatedText !== text ? translatedText: 'Everything looks good to me!';
     }
+
 }
 
 module.exports = Translator;
