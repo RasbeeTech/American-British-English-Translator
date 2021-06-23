@@ -236,7 +236,7 @@ suite('Unit Tests', () => {
             let locale = 'american-to-british';
             translator.translate(text, locale, (err, translatedText) => {
                 assert.isNull(err, 'There should be no error');
-                highlight = '<span class="highlight">'
+                let highlight = '<span class="highlight">'
                 assert.include(translatedText, highlight, 'should highlight translated texts');
             });
         });
@@ -245,7 +245,7 @@ suite('Unit Tests', () => {
             let locale = 'american-to-british';
             translator.translate(text, locale, (err, translatedText) => {
                 assert.isNull(err, 'There should be no error');
-                highlight = '<span class="highlight">'
+                let highlight = '<span class="highlight">'
                 assert.include(translatedText, highlight, 'should highlight translated texts');
             });
         });
@@ -254,7 +254,7 @@ suite('Unit Tests', () => {
             let locale = 'british-to-american';
             translator.translate(text, locale, (err, translatedText) => {
                 assert.isNull(err, 'There should be no error');
-                highlight = '<span class="highlight">'
+                let highlight = '<span class="highlight">'
                 assert.include(translatedText, highlight, 'should highlight translated texts');
             });
         });
@@ -263,7 +263,7 @@ suite('Unit Tests', () => {
             let locale = 'british-to-american';
             translator.translate(text, locale, (err, translatedText) => {
                 assert.isNull(err, 'There should be no error');
-                highlight = '<span class="highlight">'
+                let highlight = '<span class="highlight">'
                 assert.include(translatedText, highlight, 'should highlight translated texts');
             });
         });
