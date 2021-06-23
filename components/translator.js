@@ -33,9 +33,12 @@ class Translator {
             // Sort keys by longest words first.
             return key2.length - key1.length;
         }).forEach((key) => {
-            if(translatedText.includes(key)){
-                let translation = '<span class="highlight">' + americanOnly[key] + '</span>'
-                translatedText = translatedText.replace(key, translation);
+            let regex = new RegExp(key  ,'i');
+            if(regex.test(translatedText)){
+                while(regex.test(translatedText)){
+                    let translation = '<span class="highlight">' + americanOnly[key] + '</span>'
+                    translatedText = translatedText.replace(regex, translation);
+                }
             }
         });
 
@@ -72,14 +75,21 @@ class Translator {
         */
 
         let translatedText = text;
+        let temp = text;
 
         // Check for British phrase translations.
         Object.keys(britishOnly).sort((key1, key2) => {
             // Sort keys by longest words first.
             return key2.length - key1.length;
         }).forEach((key) => {
-            let translation = '<span class="highlight">' + britishOnly[key] + '</span>'
-            translatedText = translatedText.replace(key, translation);
+            let regex = new RegExp(key  ,'i');
+            if(regex.test(temp)){
+                while(regex.test(translatedText)){
+                    temp.replace(regex, '');
+                    let translation = '<span class="highlight">' + britishOnly[key] + '</span>'
+                    translatedText = translatedText.replace(regex, translation);
+                }
+            }
         });
 
         // Check for British to American spelling and titles.
@@ -103,7 +113,8 @@ class Translator {
                 let translation = '<span class="highlight">' + americanSpelling + '</span>';
                 translatedText = translatedText.replace(rawText, translation);
             }
-            if(/^([0-1]?[0-9]|2[0-3]).[0-5][0-9]$/.test(rawText)){
+            let timeRegex = new RegExp('^([0-1]?[0-9]|2[0-3]).[0-5][0-9][.\s]?$');
+            if(timeRegex.test(rawText)){
                 let americanTime = rawText.replace('.', ':');
                 let translation = '<span class="highlight">' + americanTime + '</span>';
                 translatedText = translatedText.replace(rawText, translation);
